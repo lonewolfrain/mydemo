@@ -20,7 +20,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun initView(binding: ActivityMainBinding,savedInstanceState: Bundle?) {
         acBinding = binding
         acBinding.text.setText("不是text了")
-        startActivity(Intent(this,Test::class.java))
+        startActivity(Intent(this,BigImageViewActivity::class.java))
     }
 
 }

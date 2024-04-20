@@ -19,7 +19,7 @@ import java.io.InputStream
 /**
  * @author: zzx
  * @date: 2024/4/18
- * desc:分段显示大图,内存复用,避免OOM
+ * desc:分段显示大图,内存复用,避免OOM，惯性滚动
  */
 class BigImageView @JvmOverloads constructor(
     context: Context,
@@ -79,6 +79,10 @@ class BigImageView @JvmOverloads constructor(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         mViewWidth = measuredWidth
         mViewHeight = measuredHeight
+
+        // 计算缩放因子 这俩句代码是修复屏幕控件高度太高导致的问题
+        mScale = mViewWidth.toFloat() / mImageWidth.toFloat()
+        mViewHeight = (mViewHeight / mScale!!).toInt()
 
         // 确定图片加载区域
         mRect?.top = 0
@@ -143,7 +147,28 @@ class BigImageView @JvmOverloads constructor(
         invalidate()
         return false
     }
+    // 第八步 处理惯性问题
+    override fun onFling(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        mScroller.fling(0,mRect!!.top,0, -velocityY.toInt(),0,0,0,mImageHeight-mViewHeight)
+        return false
+    }
 
+    override fun computeScroll() {
+        super.computeScroll()
+        if(mScroller.isFinished){
+            return
+        }
+        if(mScroller.computeScrollOffset()){
+            mRect!!.top = mScroller.currY
+            mRect!!.bottom = mRect!!.top + mImageHeight - mViewHeight
+            invalidate()
+        }
+    }
     override fun onShowPress(e: MotionEvent) {
     }
 
@@ -152,15 +177,6 @@ class BigImageView @JvmOverloads constructor(
     }
 
     override fun onLongPress(e: MotionEvent) {
-    }
-
-    override fun onFling(
-        e1: MotionEvent,
-        e2: MotionEvent,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        return false
     }
 
 }
