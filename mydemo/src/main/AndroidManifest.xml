@@ -20,6 +20,9 @@
         <activity
             android:name=".ui.activity.BigImageViewActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activity.FixManagerActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
