@@ -18,3 +18,5 @@ dependencyResolutionManagement {
 rootProject.name = "My Application"
 include(":app")
 include(":mydemo")
+include(":pluginCore")
+include(":pluginApp")

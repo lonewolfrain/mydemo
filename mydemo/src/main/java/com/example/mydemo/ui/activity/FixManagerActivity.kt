@@ -1,16 +1,21 @@
 package com.example.mydemo.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.widget.Toast
 import com.example.mydemo.BaseActivity
 import com.example.mydemo.R
 import com.example.mydemo.databinding.ActivityFixManagerBinding
 import com.example.mydemo.util.FixManagerUtil
-import com.example.mydemo.util.TestUtil
 import com.example.mydemo.util.TestUtils
 import com.example.mydemo.viewmodel.MainViewModel
+import com.example.plugincore.PluginManager
+import com.example.plugincore.ProxyActivity
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -25,6 +30,9 @@ class FixManagerActivity : BaseActivity<ActivityFixManagerBinding, MainViewModel
 
     override fun initView(binding: ActivityFixManagerBinding, savedInstanceState: Bundle?) {
         fmBinding = binding
+        setListener()
+    }
+    fun setListener(){
         fmBinding.btnToast.setOnClickListener {
             try {
 //                val value = TestUtil().divisionCalculate(10, 0)
@@ -53,7 +61,8 @@ class FixManagerActivity : BaseActivity<ActivityFixManagerBinding, MainViewModel
             var outputStream: FileOutputStream? = null
             try {
                 // 起点
-                inputStream = this.assets.open(name)
+//                inputStream = this.assets.open(name)
+                inputStream = FileInputStream(File(Environment.getExternalStorageDirectory(),name))
                 // 终点
                 outputStream = FileOutputStream(absolutePath)
                 var len = 0
@@ -75,5 +84,22 @@ class FixManagerActivity : BaseActivity<ActivityFixManagerBinding, MainViewModel
                 }
             }
         }
+        fmBinding.loadPlugin.setOnClickListener {
+            PluginManager.getInstance().setContext(application)
+            //初始化类加载器
+            PluginManager.getInstance().loadPluginApk("${Environment.getExternalStorageDirectory()}/pluginApp-debug.apk")
+            //加载类
+            try {
+//                val aClass = PluginManager.getInstance().dexClassLoader.loadClass("com.example.plugin.Test")
+                val aClass = PluginManager.getInstance().dexClassLoader.loadClass("com.example.plugin.PluginActivity")
+                Log.w("loadPlugin","loadPlugin${aClass.name}")
+                val intent = Intent(this, ProxyActivity :: class.java)
+                intent.putExtra("activity",aClass.name)
+                startActivity(intent)
+            }catch (e : ClassNotFoundException){
+                e.printStackTrace()
+            }
+        }
     }
+
 }
