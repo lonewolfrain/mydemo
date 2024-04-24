@@ -12,14 +12,14 @@ public interface PluginInterface {
     /**
      * 模拟生命周期
      */
-    void onCreat(Bundle savedInstanceState);
+    void onCreate(Bundle savedInstanceState);
     void onStart();
     void onResume();
     void onPause();
     void onStop();
     void onDestroy();
 
-    void onSaveInstanceState(Bundle savedInstanceState);
-    void onTouchEvent(MotionEvent event);
+    void onSaveInstanceState(Bundle outState);
+    boolean onTouchEvent(MotionEvent event);
     void onBackPressed();
 }

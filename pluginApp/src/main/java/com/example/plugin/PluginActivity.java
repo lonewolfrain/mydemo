@@ -1,13 +1,14 @@
 package com.example.plugin;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.util.Log;
 
-public class PluginActivity extends AppCompatActivity {
+import com.example.plugincore.BasePluginActivity;
+
+public class PluginActivity extends BasePluginActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plugin);
     }
