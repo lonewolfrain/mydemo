@@ -41,13 +41,26 @@ public class BasePluginActivity extends AppCompatActivity implements PluginInter
     }
 
     @Override
-    public Resources getResources(){
-        return that.getResources();
+    public Resources getResources() {
+        if(that != null){
+            return that.getResources();
+        }else {
+            return super.getResources();
+        }
     }
 
     @Override
     public ClassLoader getClassLoader() {
         return that.getClassLoader();
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        if (that != null) {
+            return that.getTheme();
+        } else {
+            return super.getTheme();
+        }
     }
 
     @NonNull

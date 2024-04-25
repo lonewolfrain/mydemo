@@ -1,6 +1,8 @@
 package com.example.mydemo.ui.activity
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import com.example.mydemo.BaseActivity
 import com.example.mydemo.R
 import com.example.mydemo.databinding.ActivityMainBinding
