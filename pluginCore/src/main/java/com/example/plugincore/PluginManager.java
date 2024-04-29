@@ -1,5 +1,6 @@
 package com.example.plugincore;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -57,5 +58,9 @@ public class PluginManager {
 
     public Resources getResources() {
         return resources;
+    }
+
+    public Resources.Theme getTheme() {
+        return resources.newTheme();
     }
 }

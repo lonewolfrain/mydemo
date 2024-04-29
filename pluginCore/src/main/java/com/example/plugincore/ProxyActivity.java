@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MotionEvent;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 //代理Activity,不需要拥有自己的想法 壳
@@ -21,24 +22,33 @@ public class ProxyActivity extends AppCompatActivity {
             //实例化插件Activity
             Object activityObject = aClass.newInstance();
             //判断这个类是否是PluginInterface的子类
-            if(activityObject instanceof PluginInterface){
+            if (activityObject instanceof PluginInterface) {
                 pluginInterface = (PluginInterface) activityObject;
                 pluginInterface.attach(this);
                 pluginInterface.onCreate(savedInstanceState);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public Resources getResources(){
+    public Resources getResources() {
         return PluginManager.getInstance().getResources();
     }
 
     @Override
     public ClassLoader getClassLoader() {
         return PluginManager.getInstance().getDexClassLoader();
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        if (pluginInterface != null) {
+            return PluginManager.getInstance().getTheme();
+        } else {
+            return super.getTheme();
+        }
     }
 
     @Override
@@ -78,13 +88,13 @@ public class ProxyActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         pluginInterface.onBackPressed();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
         pluginInterface.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
